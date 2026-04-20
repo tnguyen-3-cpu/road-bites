@@ -120,6 +120,19 @@ export function usePlacesAutocomplete() {
     sessionTokenRef.current = null;
   }, []);
 
+  // Atomically restore a previously-selected place (used for swap).
+  const restore = useCallback((place) => {
+    setSuggestions([]);
+    sessionTokenRef.current = null;
+    if (!place) {
+      setText("");
+      setSelectedPlace(null);
+      return;
+    }
+    setText(place.description || "");
+    setSelectedPlace(place);
+  }, []);
+
   return {
     text,
     setText: handleTextChange,
@@ -128,5 +141,6 @@ export function usePlacesAutocomplete() {
     selectedPlace,
     handleSelect,
     clearSelection,
+    restore,
   };
 }
