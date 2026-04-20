@@ -3,6 +3,7 @@ import { getDirections } from "../api/googleMaps";
 
 // Module-level cache. Survives re-renders but not app restarts.
 // Keyed by: `${placeId}|${origin.lat},${origin.lng}->${dest.lat},${dest.lng}`.
+// No eviction policy — acceptable for typical session volumes.
 const detourCache = new Map();
 
 function makeKey(restaurant, origin, destination) {
@@ -23,7 +24,7 @@ export function useDetour(restaurant, origin, destination, baseDurationSec) {
       restaurant.longitude == null ||
       !origin ||
       !destination ||
-      !baseDurationSec
+      baseDurationSec == null
     ) {
       setState({ detourMinutes: null, isLoading: false, error: null });
       return;
@@ -62,7 +63,7 @@ export function useDetour(restaurant, origin, destination, baseDurationSec) {
         setState({ detourMinutes, isLoading: false, error: null });
       } catch (err) {
         if (!cancelled)
-          setState({ detourMinutes: null, isLoading: false, error: err.message });
+          setState({ detourMinutes: null, isLoading: false, error: err?.message ?? "fetch-error" });
       }
     })();
 
