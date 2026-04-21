@@ -32,12 +32,12 @@ function DetourPill({ detour }) {
   if (detourMinutes === 0) {
     return (
       <View style={[styles.detourPill, styles.detourPillOnRoute]}>
-        <Text style={styles.detourPillTextOnRoute}>On route</Text>
+        <Text style={styles.detourPillText}>On route</Text>
       </View>
     );
   }
   return (
-    <View style={styles.detourPill}>
+    <View style={[styles.detourPill, styles.detourPillAmber]}>
       <Text style={styles.detourPillText}>+{detourMinutes} min</Text>
     </View>
   );
@@ -292,6 +292,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.spacing.sm,
     paddingVertical: 2,
     borderRadius: 999,
+  },
+  detourPillAmber: {
     backgroundColor: "#F4A84B", // warm amber
   },
   detourPillLoading: {
@@ -306,17 +308,10 @@ const styles = StyleSheet.create({
     fontWeight: layout.fontWeight.bold,
     letterSpacing: 0.3,
   },
-  detourPillTextOnRoute: {
-    color: colors.ivory,
-    fontSize: layout.fontSize.xs,
-    fontWeight: layout.fontWeight.bold,
-    letterSpacing: 0.3,
-  },
   reviews: {
     fontSize: layout.fontSize.xs,
     color: colors.textTertiary,
-    flex: 1,
-    marginRight: layout.spacing.sm,
+    flexShrink: 1,
   },
   cta: {
     fontSize: layout.fontSize.xs,
