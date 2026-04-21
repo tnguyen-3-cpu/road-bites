@@ -17,7 +17,33 @@ const SIDE = layout.spacing.md;
 export const CARD_WIDTH = Math.min(SCREEN_WIDTH - SIDE * 2 - 32, 300);
 const SNAP = CARD_WIDTH + GAP;
 
-function Card({ restaurant, selected, onPress }) {
+function DetourPill({ detour }) {
+  const { detourMinutes, isLoading, error } = detour;
+
+  if (error) return null;
+  if (isLoading) {
+    return (
+      <View style={[styles.detourPill, styles.detourPillLoading]}>
+        <Text style={styles.detourPillText}>…</Text>
+      </View>
+    );
+  }
+  if (detourMinutes == null) return null;
+  if (detourMinutes === 0) {
+    return (
+      <View style={[styles.detourPill, styles.detourPillOnRoute]}>
+        <Text style={styles.detourPillTextOnRoute}>On route</Text>
+      </View>
+    );
+  }
+  return (
+    <View style={styles.detourPill}>
+      <Text style={styles.detourPillText}>+{detourMinutes} min</Text>
+    </View>
+  );
+}
+
+function Card({ restaurant, selected, onPress, detour }) {
   return (
     <Pressable
       onPress={() => onPress(restaurant)}
@@ -46,11 +72,14 @@ function Card({ restaurant, selected, onPress }) {
         </Text>
       ) : null}
       <View style={styles.footer}>
-        <Text style={styles.reviews} numberOfLines={1}>
-          {restaurant.reviewCount
-            ? `${restaurant.reviewCount.toLocaleString()} reviews`
-            : "New find"}
-        </Text>
+        <View style={styles.footerLeft}>
+          <Text style={styles.reviews} numberOfLines={1}>
+            {restaurant.reviewCount
+              ? `${restaurant.reviewCount.toLocaleString()} reviews`
+              : "New find"}
+          </Text>
+          {selected && detour ? <DetourPill detour={detour} /> : null}
+        </View>
         <Text style={styles.cta}>Details →</Text>
       </View>
     </Pressable>
@@ -63,6 +92,7 @@ export function RestaurantCarousel({
   onSelect,
   onOpen,
   bottomInset = 0,
+  focusedDetour = null,
 }) {
   const listRef = useRef(null);
 
@@ -96,9 +126,10 @@ export function RestaurantCarousel({
         restaurant={item}
         selected={item.id === selectedId}
         onPress={onOpen}
+        detour={item.id === selectedId ? focusedDetour : null}
       />
     ),
-    [selectedId, onOpen]
+    [selectedId, onOpen, focusedDetour]
   );
 
   const keyExtractor = useCallback(
@@ -249,6 +280,37 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  footerLeft: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: layout.spacing.sm,
+    gap: 6,
+  },
+  detourPill: {
+    paddingHorizontal: layout.spacing.sm,
+    paddingVertical: 2,
+    borderRadius: 999,
+    backgroundColor: "#F4A84B", // warm amber
+  },
+  detourPillLoading: {
+    backgroundColor: colors.borderCream,
+  },
+  detourPillOnRoute: {
+    backgroundColor: "#2f8a4a",
+  },
+  detourPillText: {
+    color: colors.ivory,
+    fontSize: layout.fontSize.xs,
+    fontWeight: layout.fontWeight.bold,
+    letterSpacing: 0.3,
+  },
+  detourPillTextOnRoute: {
+    color: colors.ivory,
+    fontSize: layout.fontSize.xs,
+    fontWeight: layout.fontWeight.bold,
+    letterSpacing: 0.3,
   },
   reviews: {
     fontSize: layout.fontSize.xs,
