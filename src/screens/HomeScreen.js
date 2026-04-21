@@ -284,7 +284,7 @@ export function HomeScreen() {
         restaurant={selectedRestaurant}
         visible={selectedRestaurant != null}
         onClose={() => setSelectedRestaurant(null)}
-        detour={detour}
+        detour={selectedRestaurant?.id === focusedRestaurant?.id ? detour : null}
       />
     </View>
   );
