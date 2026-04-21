@@ -13,6 +13,7 @@ import { MapControls } from "../components/MapControls";
 import { useDeviceLocation } from "../hooks/useDeviceLocation";
 import { usePlacesAutocomplete } from "../hooks/usePlacesAutocomplete";
 import { useRestaurants } from "../hooks/useRestaurants";
+import { useDetour } from "../hooks/useDetour";
 import { getDirections } from "../api/googleMaps";
 import { colors } from "../constants/colors";
 import { layout } from "../constants/layout";
@@ -33,6 +34,18 @@ export function HomeScreen() {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [focusedRestaurantId, setFocusedRestaurantId] = useState(null);
   const { restaurants, isLoading: restaurantsLoading } = useRestaurants(routeCoords);
+
+  const focusedRestaurant = useMemo(
+    () => restaurants.find((r) => r.id === focusedRestaurantId) ?? null,
+    [restaurants, focusedRestaurantId]
+  );
+
+  const detour = useDetour(
+    focusedRestaurant,
+    startAC.selectedPlace?.coordinate ?? null,
+    endAC.selectedPlace?.coordinate ?? null,
+    routeInfo?.durationValue ?? null
+  );
 
   // Animate map when a single place is selected (start or end alone)
   useEffect(() => {
@@ -78,7 +91,11 @@ export function HomeScreen() {
         if (cancelled || !result) return;
 
         setRouteCoords(result.points);
-        setRouteInfo({ distance: result.distance, duration: result.duration });
+        setRouteInfo({
+          distance: result.distance,
+          duration: result.duration,
+          durationValue: result.durationValue,
+        });
 
         if (mapRef.current && result.points.length) {
           mapRef.current.fitToCoordinates(result.points, {
@@ -260,12 +277,14 @@ export function HomeScreen() {
         onSelect={handleCarouselSelect}
         onOpen={handleCarouselOpen}
         bottomInset={insets.bottom}
+        focusedDetour={detour}
       />
 
       <RestaurantDetailSheet
         restaurant={selectedRestaurant}
         visible={selectedRestaurant != null}
         onClose={() => setSelectedRestaurant(null)}
+        detour={detour}
       />
     </View>
   );
