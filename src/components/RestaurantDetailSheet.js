@@ -53,7 +53,7 @@ async function openTikTokFor(name, address) {
   }
 }
 
-export function RestaurantDetailSheet({ restaurant, visible, onClose }) {
+export function RestaurantDetailSheet({ restaurant, visible, onClose, detour }) {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -136,6 +136,19 @@ export function RestaurantDetailSheet({ restaurant, visible, onClose }) {
                 <Text style={styles.meta}>  ·  {restaurant.cuisine}</Text>
               ) : null}
             </View>
+
+            {detour && !detour.error && !detour.isLoading && detour.detourMinutes != null ? (
+              <Text
+                style={[
+                  styles.detourLine,
+                  detour.detourMinutes === 0 && styles.detourLineOnRoute,
+                ]}
+              >
+                {detour.detourMinutes === 0
+                  ? "On route — no extra time"
+                  : `Adds ${detour.detourMinutes} min to your trip`}
+              </Text>
+            ) : null}
 
             {details?.summary ? (
               <Text style={styles.summary}>{details.summary}</Text>
@@ -255,6 +268,15 @@ const styles = StyleSheet.create({
   meta: {
     fontSize: layout.fontSize.md,
     color: colors.textSecondary,
+  },
+  detourLine: {
+    fontSize: layout.fontSize.sm,
+    fontWeight: layout.fontWeight.semibold,
+    color: "#C07A1F", // darker amber for text contrast on ivory
+    marginTop: layout.spacing.sm,
+  },
+  detourLineOnRoute: {
+    color: "#2f8a4a",
   },
   summary: {
     fontSize: layout.fontSize.sm,
