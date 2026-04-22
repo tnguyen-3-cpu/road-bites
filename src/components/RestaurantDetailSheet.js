@@ -14,6 +14,8 @@ import { getRestaurantDetails } from "../api/googlePlaces";
 import { colors } from "../constants/colors";
 import { layout } from "../constants/layout";
 
+const ON_ROUTE_THRESHOLD_MIN = 2;
+
 function buildYelpUrl(name, latitude, longitude) {
   const q = encodeURIComponent(name);
   return `https://www.yelp.com/search?find_desc=${q}&find_loc=${latitude},${longitude}`;
@@ -141,10 +143,10 @@ export function RestaurantDetailSheet({ restaurant, visible, onClose, detour }) 
               <Text
                 style={[
                   styles.detourLine,
-                  detour.detourMinutes === 0 && styles.detourLineOnRoute,
+                  detour.detourMinutes <= ON_ROUTE_THRESHOLD_MIN && styles.detourLineOnRoute,
                 ]}
               >
-                {detour.detourMinutes === 0
+                {detour.detourMinutes <= ON_ROUTE_THRESHOLD_MIN
                   ? "On route — no extra time"
                   : `Adds ${detour.detourMinutes} min to your trip`}
               </Text>

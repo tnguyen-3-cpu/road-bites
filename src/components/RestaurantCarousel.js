@@ -16,6 +16,7 @@ const GAP = layout.spacing.sm + 2;
 const SIDE = layout.spacing.md;
 export const CARD_WIDTH = Math.min(SCREEN_WIDTH - SIDE * 2 - 32, 300);
 const SNAP = CARD_WIDTH + GAP;
+const ON_ROUTE_THRESHOLD_MIN = 2;
 
 function DetourPill({ detour }) {
   const { detourMinutes, isLoading, error } = detour;
@@ -29,7 +30,7 @@ function DetourPill({ detour }) {
     );
   }
   if (detourMinutes == null) return null;
-  if (detourMinutes === 0) {
+  if (detourMinutes <= ON_ROUTE_THRESHOLD_MIN) {
     return (
       <View style={[styles.detourPill, styles.detourPillOnRoute]}>
         <Text style={styles.detourPillText}>On route</Text>
