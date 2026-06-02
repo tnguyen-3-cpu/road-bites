@@ -11,9 +11,14 @@ export function SearchBar({
   returnKeyType,
   onFocus,
   onBlur,
+  accentColor = colors.primary,
+  showLeadingDot = true,
 }) {
   return (
     <View style={styles.container}>
+      {showLeadingDot ? (
+        <View style={[styles.dot, { backgroundColor: accentColor }]} />
+      ) : null}
       <TextInput
         style={styles.input}
         value={value}
@@ -34,15 +39,23 @@ export function SearchBar({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.ivory,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.parchment,
     borderRadius: layout.borderRadius.lg,
     borderWidth: 1,
     borderColor: colors.borderWarm,
     paddingHorizontal: layout.spacing.md,
     paddingVertical: layout.spacing.sm + 2,
-    marginBottom: layout.spacing.sm,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: layout.spacing.sm + 2,
   },
   input: {
+    flex: 1,
     fontSize: layout.fontSize.md,
     fontWeight: layout.fontWeight.regular,
     color: colors.text,

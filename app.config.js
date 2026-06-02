@@ -22,6 +22,7 @@ export default ({ config }) => ({
         "Road Bites uses your location to show nearby food stops along your route.",
       NSLocationAlwaysUsageDescription:
         "Road Bites uses your location to show nearby food stops along your route.",
+      LSApplicationQueriesSchemes: ["snssdk1233", "tiktok"],
     },
   },
   android: {
@@ -36,6 +37,10 @@ export default ({ config }) => ({
       },
     },
     permissions: ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+    queries: [
+      { scheme: "snssdk1233" },
+      { scheme: "tiktok" },
+    ],
   },
   web: {
     favicon: "./assets/favicon.png",
