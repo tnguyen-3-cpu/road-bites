@@ -13,8 +13,7 @@ import {
 import { getRestaurantDetails } from "../api/googlePlaces";
 import { colors } from "../constants/colors";
 import { layout } from "../constants/layout";
-
-const ON_ROUTE_THRESHOLD_MIN = 2;
+import { ON_ROUTE_THRESHOLD_MIN } from "../constants/detour";
 
 function buildYelpUrl(name, latitude, longitude) {
   const q = encodeURIComponent(name);

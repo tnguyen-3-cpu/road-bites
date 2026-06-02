@@ -77,9 +77,10 @@ export function HomeScreen() {
     const startCoord = startAC.selectedPlace?.coordinate;
     const endCoord = endAC.selectedPlace?.coordinate;
 
+    setRouteInfo(null);
+
     if (!startCoord || !endCoord) {
       setRouteCoords([]);
-      setRouteInfo(null);
       return;
     }
 

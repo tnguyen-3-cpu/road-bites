@@ -10,13 +10,13 @@ import {
 } from "react-native";
 import { colors } from "../constants/colors";
 import { layout } from "../constants/layout";
+import { ON_ROUTE_THRESHOLD_MIN } from "../constants/detour";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const GAP = layout.spacing.sm + 2;
 const SIDE = layout.spacing.md;
 export const CARD_WIDTH = Math.min(SCREEN_WIDTH - SIDE * 2 - 32, 300);
 const SNAP = CARD_WIDTH + GAP;
-const ON_ROUTE_THRESHOLD_MIN = 2;
 
 function DetourPill({ detour }) {
   const { detourMinutes, isLoading, error } = detour;
